@@ -6,6 +6,7 @@
 // hint.
 
 
+
 struct Rectangle {
     width: i32,
     height: i32
@@ -41,7 +42,7 @@ mod tests {
     }
 
     #[test]
-      #[should_panic(expected = "Rectangle width and height cannot be negative!")]
+    #[should_panic(expected = "Rectangle width and height cannot be negative!")]
     fn negative_height() {
         // This test should check if program panics when we try to create rectangle with negative height
         let _rect = Rectangle::new(10, -10);

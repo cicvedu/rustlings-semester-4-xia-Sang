@@ -27,7 +27,6 @@ enum IntoColorError {
     IntConversion,
 }
 
-// I AM NOT DONE
 
 // Your task is to complete this implementation and return an Ok result of inner
 // type Color. You need to create an implementation for a tuple of three
@@ -40,24 +39,49 @@ enum IntoColorError {
 // Tuple implementation
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
-    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+    fn try_from(tuple: (i16, i16, i16)) -> Result<Color, IntoColorError> {
+         Ok(Color {
+            red: i16_to_u8(tuple.0)?,
+            green: i16_to_u8(tuple.1)?,
+            blue: i16_to_u8(tuple.2)?,
+        })
     }
 }
 
 // Array implementation
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
-    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+    fn try_from(arr: [i16; 3]) -> Result<Color, IntoColorError> {
+        Ok(Color {
+            red: i16_to_u8(arr[0])?,
+            green: i16_to_u8(arr[1])?,
+            blue: i16_to_u8(arr[2])?,
+        })
     }
 }
 
 // Slice implementation
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
-    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+    fn try_from(slice: &[i16]) -> Result<Color, IntoColorError> {
+        if slice.len() != 3 {
+            return Err(IntoColorError::BadLen);
+        }
+        Ok(Color {
+            red: i16_to_u8(slice[0])?,
+            green: i16_to_u8(slice[1])?,
+            blue: i16_to_u8(slice[2])?,
+        })
     }
 }
-
+// Helper function to convert i16 to u8 with range check
+fn i16_to_u8(value: i16) -> Result<u8, IntoColorError> {
+    if (0..=255).contains(&value) {
+        Ok(value as u8)
+    } else {
+        Err(IntoColorError::IntConversion)
+    }
+}
 fn main() {
     // Use the `try_from` function
     let c1 = Color::try_from((183, 65, 14));
